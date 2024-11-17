@@ -1,17 +1,31 @@
-# Project ML-terapan
-# Keterangan proyek
-Dataset yang digunakan pada proyek ini adalah data harga mobil. 
+# Laporan Proyek Machine Learning - Novianto
+## Domain Proyek
+Dataset yang digunakan pada proyek ini adalah data harga mobil dari berbagai tahun, tipe, dan merk. 
 
-# Problem statment
+## Business Understanding
+Berbagai macam mobil yang ada dengan berbagai kondisi membuat sulit untuk memperkirakan harga yang mobil. Oleh karena itu, analisa diperlukan untuk memberikan prediksi harga mobil dengan kondisi yang beragam.
+
+Oleh karena itu, laporan ini akan mencakup: analisa faktor atau variabel kategorial dan numerik yang dapat menjelaskan harga mobil.
+
+### Problem Statements
 Dari dataset tersebut maka pertanyaan bisnis yang diajukan adalah:
 1. Tipe dan model mobil apa yang paling banyak diminati ?
 2. Tipe dan model mobil apa yang memiliki harga tinggi ?
 3. Faktor apa yang mempengaruhi harga mobil ?
 
-# Tujuan proyek
-Tujuan dari analisa ini dilakukan adalah untuk mengetahui faktor yang mempengaruhi harga mobil
+### Goals
+Tujuan dari analisa ini dilakukan adalah untuk mengetahui faktor yang mempengaruhi harga mobil malalui  jawaban dari pertanyaan diatas.
+1. Tipe dan model mobil apa yang paling banyak diminati ?
+Jawaban pertanyaan akan memberikan gambaran jenis atau tipe mobil yang banyak diminati
+2. Tipe dan model mobil apa yang memiliki harga tinggi ?
+Jawaban dari pertanyaan ini akan menunjukkan tipe mobil yang memiliki hari tinggi
+3. Faktor apa yang mempengaruhi harga mobil ?
+Jawaban dari pertanyaan akan menunjukkan faktor yang mempengaruhi pergerakan harga mobil.
 
-# langkah solusi yang dilakukan
+Kreteria:
+Untuk jawaban nomer 3, diperlukan suatu ukuran untuk dapat menilai faktor atau variabel yang mempengaruhi harga: yaitu korelasi di atas 0.2 dan regresi dengan nilai P lebih rendah dari Tingkat kesalahan 5%. Sedangkan prediksi model adalah di atas 70%
+
+### Solution Statement
 Untuk mencapai tujuan analisa ini, berikut adalah langkah yang akan dilakukan:
 1. Melakukan pembersihan data
 2.  Melakukan proses *Exploratory Data Analysis* (EDA) untuk mengetahui faktor-faktor yang  memberikan dampak harga pada mobil
@@ -19,10 +33,12 @@ Untuk mencapai tujuan analisa ini, berikut adalah langkah yang akan dilakukan:
 4.   Membuat model dengan Random Forest, KNN dan Boosting
 5.   Mengevaluasi model
 
-# Dataset
-Data set diambil dari kaggle: https://www.kaggle.com/datasets/deepcontractor/car-price-prediction-challenge
+## Data Understanding
+Dataset Ccar_prediction diambil dari kaggle: https://www.kaggle.com/datasets/deepcontractor/car-price-prediction-challenge
 
+### variabel pada dataset car_prediction 
 Dataset yang digunakan menunjukkan terdapat 17 kolom atau faktor dalam data set:
+
 1. ID menunjukkan kode mobil
 2. Price menunjukkan harga mobil
 3. Levy menunjukkan pajak kendaraan
@@ -43,8 +59,10 @@ Dataset yang digunakan menunjukkan terdapat 17 kolom atau faktor dalam data set:
 
 Dari 17 data maka akan dicari faktor yang mempengaruhi harga mobil.
 
-# Langkah Project
-## 1. Pembersihan data
+## Data Preparation
+Teknik data preparation akan dilakukan dengan tahapan sebagai berikut:
+
+### 1. Pembersihan data
 Tahap pembersihan data dilakukan dengan:
 1.1. cek nilai yang hilang,
 1.2. cek tipe data yang salah,
@@ -84,31 +102,9 @@ Namun demikian ada data - untuk Levya yang menunjukkan bahwa nilai tidak ada. ma
 Dari info data menunjukkan adanya tipe data yang tidak sesuai. oleh akrena itu dilakukan penyesuaina data pada faktor: Mileage, Doors, Levy, Cylinders yang semua adalah data object kemudian menjadi data int atau number. Hasilnya adalah sebagai berikut:
 
 car.info()
-<class 'pandas.core.frame.DataFrame'>
-RangeIndex: 19237 entries, 0 to 19236
-Data columns (total 18 columns):
- #   Column            Non-Null Count  Dtype 
----  ------            --------------  ----- 
- 0   ID                19237 non-null  int64 
- 1   Price             19237 non-null  int64 
- 2   Levy              19237 non-null  int64 
- 3   Manufacturer      19237 non-null  object
- 4   Model             19237 non-null  object
- 5   Prod. year        19237 non-null  int64 
- 6   Category          19237 non-null  object
- 7   Leather interior  19237 non-null  object
- 8   Fuel type         19237 non-null  object
- 9   Engine volume     19237 non-null  object
- 10  Mileage           19237 non-null  int64 
- 11  Cylinders         19237 non-null  int64 
- 12  Gear box type     19237 non-null  object
- 13  Drive wheels      19237 non-null  object
- 14  Doors             19237 non-null  int64 
- 15  Wheel             19237 non-null  object
- 16  Color             19237 non-null  object
- 17  Airbags           19237 non-null  int64 
-dtypes: int64(8), object(10)
-memory usage: 2.6+ MB
+
+![image](https://github.com/user-attachments/assets/cf18baa4-4a67-4bc3-a2f7-77d1b3aefba9)
+
 
 **1.3. Melakukan normalisasi data**
 Berikut adalah data ekstrem dari variabel harga, tahun, mileage, dan levy.
@@ -126,9 +122,7 @@ Setelah dilakukan normalisasi maka data turun menjadi 10.515 data. dengan contoh
 
 ![image](https://github.com/user-attachments/assets/5e3aa326-25bd-4657-9d8d-fc8c5888227d)
 
-
-
-# 2. Melakukan analisa EDA
+### 2. Melakukan analisa EDA
 Tahap ini dilakukan dengan pendekatan Univariat dan Multivariat
 
 **2.1. Univariat**
@@ -191,10 +185,10 @@ Dari hasil visualisasi tersebut, tampak bahwa tidak ada data numerik yang memili
 
 DAri matrik heatmap tersebut, tampak hanya variabel tahun yang memiliki nilai hubungan tertinggi dibandingkan dengan variabel numerik lainnya yaitu 0.28. Dengan demikian hanya tahun yang memiliki kaitan dengan harga.
 
-## Analisa Korelasi dan regresi
-Hasil matrik heatmap menunjukkan nilai korelasi harga dengan tahun yang lebih baik dari pada variabel lainnya. Namun demikian kita perlu mengevaluasi dengan labih baik dengan melakukan uji regresi. 
+## Modeling: Korelasi dan regresi
+Hasil matrik heatmap menunjukkan nilai korelasi harga dengan tahun yang lebih baik dari pada variabel lainnya. Namun demikian kita perlu mengevaluasi dengan labih baik dengan melakukan uji regresi. Uji regresi dilakukan dengan dengan kriteria nilai P lebih rendah dari 0.05 (5%)
 
-Uji regresi dilakukan dengan pendekatan linear regression OLS. Hasilnya adalah sebagai berikut:
+Uji regresi dilakukan dengan pendekatan linear regression OLS dari library statmodel. Hasilnya adalah sebagai berikut:
                           
                 Year                              
 1. coef =       827.5463
@@ -213,7 +207,7 @@ Dari hasil tersebut, maka dapat diketahui bahwa tahun memiliki pengaruh terhadap
 
 Untuk memastikan nilai tersebut maka dilakukan uji model.
 
-# Pembuatan model dan evaluasi model
+## Evaluasi model dan evaluasi model
 Pembuatan model dilakukan dengan melakukan standarisasi supaya nilai lebih normal. Kemudian Model yang dibuat adalah dengan Random Forest, KNN danBoosting Algorithm
 
 Hasil uji model adalah tersebagai berikut:
@@ -228,11 +222,11 @@ Hasil uji model adalah tersebagai berikut:
 Dari visualisasi tersebut dapat diperoleh pemahaman bahwa model dengan menggunakan Random forest menghasilkan eror yang lebih sedikit, dan hasil test yang lebih tinggi, sehingga model RF lebih baik dari pada yang model yang lainnya.
 
 1. y_true =	              40769
-2. prediksi_KNN =	      27158.4
-3. prediksi_RF =	       32381.8
-4. prediksi_Boosting =  17779.6
+2. prediksi_KNN =	      27158.4 (66%)
+3. prediksi_RF =	       32381.8 (79%)
+4. prediksi_Boosting =  17779.6 (43%)
 
-# Kesimpulan
+## Kesimpulan
 Analisa ini dilakukan untuk mengetahui faktor atau variabel yang dapat memperngaruhi harga mobil. Oleh karena itu, hasil penelitian ini menjawab tertanyaan bisnis:
 
 1. Tipe dan model mobil apa yang paling banyak diminati ?
