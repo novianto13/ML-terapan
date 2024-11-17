@@ -1,26 +1,36 @@
 # Laporan Proyek Machine Learning - Novianto
 ## Domain Proyek
-Dataset yang digunakan pada proyek ini adalah data harga mobil dari berbagai tahun, tipe, dan merk. 
+Masalah yang Dihadapi
+Dalam industri otomotif, menentukan harga jual kendaraan merupakan tantangan yang kompleks. Harga mobil dipengaruhi oleh berbagai faktor, seperti merek, model, tahun pembuatan, spesifikasi teknis, kondisi kendaraan, serta tren pasar, yang menimbulkan ketidakpastian.
+
+Latar Belakang pemilihan masalah adalah pertumbuhan pasar otomotif. Industri otomotif global terus berkembang, dengan meningkatnya minat pada pasar mobil baru dan bekas. Untuk bersaing, perusahaan perlu memahami faktor-faktor yang memengaruhi harga kendaraan dengan lebih baik.
 
 ## Business Understanding
-Berbagai macam mobil yang ada dengan berbagai kondisi membuat sulit untuk memperkirakan harga yang mobil. Oleh karena itu, analisa diperlukan untuk memberikan prediksi harga mobil dengan kondisi yang beragam.
-
-Oleh karena itu, laporan ini akan mencakup: analisa faktor atau variabel kategorial dan numerik yang dapat menjelaskan harga mobil.
+Berbagai macam mobil yang ada dengan berbagai kondisi membuat sulit untuk memperkirakan harga yang mobil. Oleh karena itu, analisa diperlukan untuk memberikan prediksi harga mobil dengan kondisi yang beragam. Oleh karena itu, masalah yang coba diselesaikan dari kondisi pasar mobil ini adalah:
+1. Tipe mobil apa yang paling diminati.
+2. Tipe modil apa yang memiliki harga tinggi.
+3. faktor apa yang mempengaruhi harga mobil.
 
 ### Problem Statements
-Dari dataset tersebut maka pertanyaan bisnis yang diajukan adalah:
-1. Tipe dan model mobil apa yang paling banyak diminati ?
-2. Tipe dan model mobil apa yang memiliki harga tinggi ?
-3. Faktor apa yang mempengaruhi harga mobil ?
+Dari masalah bisnis yang ada tersebut maka pernyataan masalah bisnis yang diajukan adalah:
+1. Apakah tipe dan model mobil yang paling banyak diminati ?
+2. Apakah tipe dan model mobil yang memiliki harga tinggi ?
+3. Apakah faktor yang mempengaruhi harga mobil ?
 
 ### Goals
-Tujuan dari analisa ini dilakukan adalah untuk mengetahui faktor yang mempengaruhi harga mobil malalui  jawaban dari pertanyaan diatas.
-1. Tipe dan model mobil apa yang paling banyak diminati ?
-Jawaban pertanyaan akan memberikan gambaran jenis atau tipe mobil yang banyak diminati
-2. Tipe dan model mobil apa yang memiliki harga tinggi ?
-Jawaban dari pertanyaan ini akan menunjukkan tipe mobil yang memiliki hari tinggi
-3. Faktor apa yang mempengaruhi harga mobil ?
-Jawaban dari pertanyaan akan menunjukkan faktor yang mempengaruhi pergerakan harga mobil.
+Berdasarkan problem statements yang diajukan, tujuan proyek ini dirancang untuk menyelesaikan masalah bisnis dan memberikan wawasan strategis. Berikut adalah goals proyek yang menghubungkan masalah dengan solusi:
+
+1. Mengidentifikasi Tipe dan Model Mobil yang Paling Banyak Diminati
+Masalah: Tidak ada data pasti mengenai jenis dan model mobil yang paling diminati oleh pasar.
+Tujuan: Menghasilkan wawasan tentang tren preferensi konsumen berdasarkan data penjualan, fitur kendaraan, atau ulasan. Hal ini akan membantu dealer dan produsen menyusun strategi pemasaran yang lebih efektif.
+
+2. Menganalisis Tipe dan Model Mobil dengan Harga Tinggi
+Masalah: Tidak ada pemahaman yang jelas tentang tipe dan model mobil yang cenderung memiliki harga tinggi di pasar.
+Tujuan: Mengidentifikasi kategori kendaraan (merek, model, atau fitur premium) yang berkontribusi terhadap segmen harga tinggi. Informasi ini dapat digunakan oleh produsen untuk menargetkan segmen premium secara strategis.
+
+3. Mengidentifikasi Faktor-Faktor yang Mempengaruhi Harga Mobil
+Masalah: Penentuan harga mobil yang optimal sering kali kompleks karena melibatkan berbagai variabel.
+Tujuan: Mengembangkan model yang mampu memprediksi harga mobil berdasarkan faktor-faktor seperti spesifikasi teknis, tahun produksi, kondisi kendaraan, dan lainnya. Hal ini bertujuan untuk memberikan panduan harga yang lebih akurat bagi dealer dan konsumen.
 
 Kreteria:
 Untuk jawaban nomer 3, diperlukan suatu ukuran untuk dapat menilai faktor atau variabel yang mempengaruhi harga: yaitu korelasi di atas 0.2 dan regresi dengan nilai P lebih rendah dari Tingkat kesalahan 5%. Sedangkan prediksi model adalah di atas 70%
@@ -36,8 +46,7 @@ Untuk mencapai tujuan analisa ini, berikut adalah langkah yang akan dilakukan:
 ## Data Understanding
 Dataset Ccar_prediction diambil dari kaggle: https://www.kaggle.com/datasets/deepcontractor/car-price-prediction-challenge
 
-### variabel pada dataset car_prediction 
-Dataset yang digunakan menunjukkan terdapat 17 kolom atau faktor dalam data set:
+Dataset yang digunakan menunjukkan terdapat 17 kolom atau faktor dalam data set dan terdapat 19.237 baris atau data dalam dataset, yaitu :
 
 1. ID menunjukkan kode mobil
 2. Price menunjukkan harga mobil
@@ -57,18 +66,13 @@ Dataset yang digunakan menunjukkan terdapat 17 kolom atau faktor dalam data set:
 16. Color menunjukkan warna kendaraan
 17. Airbags menunjukkan jumlah airbag dalam kendaraan
 
-Dari 17 data maka akan dicari faktor yang mempengaruhi harga mobil.
+### 1. Cek nilai data:
+Tahapan evaluasi nilai data dilakukan dengan tahapan sebagai berikut:
+A. cek nilai yang hilang,
+B. cek tipe data yang salah,
+C. cek normalitas data.
 
-## Data Preparation
-Teknik data preparation akan dilakukan dengan tahapan sebagai berikut:
-
-### 1. Pembersihan data
-Tahap pembersihan data dilakukan dengan:
-1.1. cek nilai yang hilang,
-1.2. cek tipe data yang salah,
-1.3. cek normalitas data.
-
-**1.2 Cek nilai yang hilang**
+**A. Cek nilai yang hilang**
 Hasil cek data menunjukkan tidak ada daya kosong karena data konsisten 19237 pada setiap faktor.
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 19237 entries, 0 to 19236
@@ -98,7 +102,7 @@ memory usage: 2.6+ MB
 
 Namun demikian ada data - untuk Levya yang menunjukkan bahwa nilai tidak ada. maka pada bagian ini nilai tersebut akan dirubah menjadi nilai 0.
 
-**1.2. Cek tipe data yang salah**
+**B. Cek tipe data yang salah**
 Dari info data menunjukkan adanya tipe data yang tidak sesuai. oleh akrena itu dilakukan penyesuaina data pada faktor: Mileage, Doors, Levy, Cylinders yang semua adalah data object kemudian menjadi data int atau number. Hasilnya adalah sebagai berikut:
 
 car.info()
@@ -106,7 +110,7 @@ car.info()
 ![image](https://github.com/user-attachments/assets/cf18baa4-4a67-4bc3-a2f7-77d1b3aefba9)
 
 
-**1.3. Melakukan normalisasi data**
+**C. Cek normalisasi data**
 Berikut adalah data ekstrem dari variabel harga, tahun, mileage, dan levy.
 
 ![image](https://github.com/user-attachments/assets/972321c8-66bf-48f2-9c5c-b4a389b9ba7b)
@@ -121,6 +125,7 @@ Visualisai tersebut menunjukkan data numerik yang tidak normal. Maka dilakukan n
 Setelah dilakukan normalisasi maka data turun menjadi 10.515 data. dengan contoh hasil adapah sebagai berikut.
 
 ![image](https://github.com/user-attachments/assets/5e3aa326-25bd-4657-9d8d-fc8c5888227d)
+
 
 ### 2. Melakukan analisa EDA
 Tahap ini dilakukan dengan pendekatan Univariat dan Multivariat
@@ -183,7 +188,16 @@ Dari hasil visualisasi tersebut, tampak bahwa tidak ada data numerik yang memili
 
 ![image](https://github.com/user-attachments/assets/a6906571-1d28-4f79-9c13-420c48641671)
 
-DAri matrik heatmap tersebut, tampak hanya variabel tahun yang memiliki nilai hubungan tertinggi dibandingkan dengan variabel numerik lainnya yaitu 0.28. Dengan demikian hanya tahun yang memiliki kaitan dengan harga.
+Dari matrik heatmap tersebut, tampak hanya variabel tahun yang memiliki nilai hubungan tertinggi dibandingkan dengan variabel numerik lainnya yaitu 0.28. Dengan demikian hanya tahun yang memiliki kaitan dengan harga.
+
+
+## Data Preparation
+Teknik data preparation akan dilakukan dengan tahapan sebagai berikut:
+1. perbaikan tipe data
+2. normalisasi data
+
+
+
 
 ## Modeling: Korelasi dan regresi
 Hasil matrik heatmap menunjukkan nilai korelasi harga dengan tahun yang lebih baik dari pada variabel lainnya. Namun demikian kita perlu mengevaluasi dengan labih baik dengan melakukan uji regresi. Uji regresi dilakukan dengan dengan kriteria nilai P lebih rendah dari 0.05 (5%)
