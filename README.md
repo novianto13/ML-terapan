@@ -158,12 +158,96 @@ Cek data untuk variabel numerik
 Dari cek data numerik tersebut dapat diketahui bahwa data untuk harga, mileage, year cenderung normal. Data ini akan diuji lagi nanti.
 
 **2.2. Multivariat**
+PAda analisa mulivariat, kita akan menggambungkan dua variabel atau faktor untuk mendapatkan informasi yang lebih luas. Sesuai dengan tujuan dari analisa ini, maka variabel atau faktor harga akan dikaitkan dengan variabel kategori, antara lain: category,interrior, fuel type, gear box, drive wheel.
 
+![image](https://github.com/user-attachments/assets/ee61856b-601b-402f-a1c2-58dccbe3a5b4)
 
 ![image](https://github.com/user-attachments/assets/c41d78ec-4894-4385-bbf0-0e1f45af89e4)
 
+![image](https://github.com/user-attachments/assets/5099f57e-a6c8-4b63-b343-493be1970b88)
+
+![image](https://github.com/user-attachments/assets/3f2a706f-c4f8-4dc4-ad42-72c41b4da34f)
+
+![image](https://github.com/user-attachments/assets/dc517d13-b106-4eac-b6b3-f6ced9b7c3ab)
+
+![image](https://github.com/user-attachments/assets/b4f04ea8-dd6c-4fc8-a700-41a883a251e0)
 
 
+Hasil visualisasi multivariat di atas menunjukkan:
+1. Mobil dengan category universal memiliki harga lebih tinggi dari pada jenis mobil lainnya.
+2. Desain interior yang berbahan kulit memiliki harga yang lebih mahal.
+3. Mobil dengan mesin diesel memiliki hargal yang relatif lebih mahal dari jenis mesin yang lain.
+4. Mobil dengan transmisi tiptronic memilik harga yang lebih mahal
+5. Mobbil dengan roda penggerak belakang memiliki harga yang lebih mahal dari yang jenis lainnya
+6. Mobil dengan warna kuning memiliki harga yang relatif lebih mahal dari warna lainnya
+
+Setelah kita mengetahui kaitan harga denga beberapa variabel kategori, maka selanjutnya kita akan melihat kaitan harga dengan variabel numerik lain. hasilnya adalah sebagai berikut:
+
+![image](https://github.com/user-attachments/assets/1c02d766-a684-4cb7-bad2-feed771f1eda)
+
+Dari hasil visualisasi tersebut, tampak bahwa tidak ada data numerik yang memiliki pengaruh langsung dengan harga. Untuk mengevaluasinya, maka kita dapat melihat dalam matrix heatmap berikut ini:
+
+![image](https://github.com/user-attachments/assets/a6906571-1d28-4f79-9c13-420c48641671)
+
+DAri matrik heatmap tersebut, tampak hanya variabel tahun yang memiliki nilai hubungan tertinggi dibandingkan dengan variabel numerik lainnya yaitu 0.28. Dengan demikian hanya tahun yang memiliki kaitan dengan harga.
+
+## Analisa Korelasi dan regresi
+Hasil matrik heatmap menunjukkan nilai korelasi harga dengan tahun yang lebih baik dari pada variabel lainnya. Namun demikian kita perlu mengevaluasi dengan labih baik dengan melakukan uji regresi. 
+
+Uji regresi dilakukan dengan pendekatan linear regression OLS. Hasilnya adalah sebagai berikut:
+                          
+                Year                              
+1. coef =       827.5463
+2. std err =      28.153
+3.   t =          29.394
+4. P>|t| =         0.000 
+5. 0.025 =       772.360
+6. 0.975 =       882.732
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 1.05e+06. This might indicate that there are
+strong multicollinearity or other numerical problems.
+
+Dari hasil tersebut, maka dapat diketahui bahwa tahun memiliki pengaruh terhadap harga dengan melihat nilai P sebesar 0.000. Dengan nilai koefisien sebesar 827.54, hasil regresi memasikan bahwa tahun memiliki pengaruh pada harga. Nilai koefisien yang positif ini menunjukkan bahwa terdapat hubungan positf, yaitu semakin baru tahyn kedaraan maka semakin tinggi harganya, dengan kenaikan sebesar 827.54. 
+
+Untuk memastikan nilai tersebut maka dilakukan uji model.
+
+# Pembuatan model dan evaluasi model
+Pembuatan model dilakukan dengan melakukan standarisasi supaya nilai lebih normal. Kemudian Model yang dibuat adalah dengan Random Forest, KNN danBoosting Algorithm
+
+Hasil uji model adalah tersebagai berikut:
+
+                 train	       test
+1. KNN =     	68211.830462 	81260.940738
+2. RF =       	8727.114406 	23225.015087
+3. Boosting =	73626.970477 	76027.696185
+
+![image](https://github.com/user-attachments/assets/aa5583c3-a1c2-46b5-8d35-b653fe68a988)
+
+Dari visualisasi tersebut dapat diperoleh pemahaman bahwa model dengan menggunakan Random forest menghasilkan eror yang lebih sedikit, dan hasil test yang lebih tinggi, sehingga model RF lebih baik dari pada yang model yang lainnya.
+
+1. y_true =	              40769
+2. prediksi_KNN =	      27158.4
+3. prediksi_RF =	       32381.8
+4. prediksi_Boosting =  17779.6
+
+# Kesimpulan
+Analisa ini dilakukan untuk mengetahui faktor atau variabel yang dapat memperngaruhi harga mobil. Oleh karena itu, hasil penelitian ini menjawab tertanyaan bisnis:
+
+1. Tipe dan model mobil apa yang paling banyak diminati ?
+Mobil yang paling banyak diminati adalah mobil jenis sedan dengan transmisi otomatis dan roda penggerak depan. Banyaknya permintaan terhadap jenis produk ini dapat disebabkan oleh harga produk sedan masuk kategori kendaraan yang harganya tidak mahal selain hatchbank, goods wagon, dan cabriolet. Selain itu, harga transmisi otomatis dan roda penggrak depan tidak semahal transmisi tiptronic dan harganya telatif hampir sma dengan transmisi Variator. Termasuk juga roda penggerak depan lebih murah dari pada penggerak balakang.
+
+Dengan demikian, produksi sedan dengan transmisi otomatis akan lebih diminati.
+
+
+3. Tipe dan model mobil apa yang memiliki harga tinggi ?
+Dari hasil analisa, harga mobil akan lebih tinggi jika mememiliki unsur interior kulit, dengan transmisi tiptronic dan berbahan bakar diesel dengan model mobil adalah kendaraan universal. Mobil yang masuk kategori-kategori tersebut akan cenderung memiliki harga lebih mahal.
+
+5. Faktor apa yang mempengaruhi harga mobil ?
+Dari uji korelasi dan regresi, maka variabel tahun adalah yang a=paling menunjukkan kaitan dengan harga. Dengan demikian tahun kendaraan yang relaitf baru akan memiliki ralatif harga yang lebih mahal sebesar 827.54.
+
+Nilai koefisien ini dapat diprediksi dengan oleh model dengan Random forest. 
 
 
 
