@@ -416,15 +416,18 @@ boosting.fit(X_train, y_train): Baris ini melatih model boosting.
 X_train: Berisi fitur (seperti tahun, jarak tempuh, dll.) yang digunakan untuk memprediksi harga mobil. y_train: Berisi harga mobil aktual yang akan dipelajari model.
 
 ## Evaluasi model dan evaluasi model
+
 Pembuatan model dilakukan dengan melakukan standarisasi supaya nilai lebih normal. Kemudian Model yang dibuat adalah dengan Random Forest, KNN danBoosting Algorithm. BErikut adalah evaluasinya.
 
 **1. Evaluasi model KNN
+
 models.loc['train_mse','knn'] = ...: Baris ini menyimpan Mean Squared Error (MSE) pelatihan model KNN dalam Pandas DataFrame yang disebut models.
 mean_squared_error(y_pred = knn.predict(X_train), y_true=y_train): Bagian ini menghitung MSE.
 knn.predict(X_train): Menggunakan model KNN yang telah dilatih (knn) untuk memprediksi harga mobil untuk data pelatihan (X_train). Prediksi ini ditetapkan ke y_pred.
 mean_squared_error(y_pred, y_true=y_train): Membandingkan harga yang diprediksi (y_pred) dengan harga aktual (y_train) dan menghitung MSE, ukuran kesalahan prediksi model.
 
 **2. Evaluasi model Random Forest**
+
 models.loc['train_mse','RandomForest'] = ...: Baris ini menyimpan metrik performa model (Mean Squared Error - MSE) dalam Pandas DataFrame yang disebut models.
 mean_squared_error(y_pred=RF.predict(X_train), y_true=y_train): Ini menghitung MSE prediksi model pada data pelatihan:
 RF.predict(X_train): Ini menggunakan model yang dilatih (RF) untuk membuat prediksi pada data pelatihan (X_train).
@@ -432,6 +435,7 @@ y_true=y_train: Ini menyediakan nilai aktual dari variabel target (y_train) untu
 mean_squared_error(...): Fungsi ini menghitung MSE, metrik umum untuk mengevaluasi model regresi. Nilai MSE yang lebih rendah menunjukkan performa yang lebih baik.
 
 **3. Evaluasi model Boost algorithm**
+
 models.loc['train_mse','Boosting'] = ...: Baris ini menyimpan kinerja model pada data pelatihan.
 mean_squared_error(...): Fungsi ini menghitung Mean Squared Error (MSE), metrik umum untuk mengevaluasi model regresi. MSE yang lebih rendah menunjukkan akurasi yang lebih baik.
 boosting.predict(X_train): Bagian ini menggunakan model yang dilatih (boosting) untuk memprediksi harga mobil berdasarkan data pelatihan (X_train).
