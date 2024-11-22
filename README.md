@@ -140,7 +140,7 @@ car.info()
 
 
 
-**C. Cek normalisasi data**
+**C. Cek outlier data**
 Berikut adalah data ekstrem dari variabel harga, tahun, mileage, dan levy.
 
 ![image](https://github.com/user-attachments/assets/972321c8-66bf-48f2-9c5c-b4a389b9ba7b)
@@ -239,7 +239,7 @@ Hasilnya adalah sebagai berikut:
 
 ![image](https://github.com/user-attachments/assets/c754c557-61b6-497d-b50b-029f0e8667d2)
 
-**2. Normalisasi data**
+**2. Perbaikan outlier data**
 Hasil data understantding menunjukkan adanya data ekstreme. oleh karena itu normalisasi dilakukan, khususnya pada variabel harga. Hasilnya adalah sebagai berikut:
 
 ![image](https://github.com/user-attachments/assets/2573a27b-80f7-4965-843b-397c467f2b74)
@@ -282,7 +282,7 @@ y_test: Variabel target (harga) untuk set pengujian.
 
 Singkatnya: Cuplikan kode ini menyiapkan data untuk pembelajaran mesin dengan memisahkannya menjadi set pelatihan dan pengujian. Model akan dilatih pada data pelatihan dan kemudian dievaluasi menggunakan data uji untuk menilai seberapa baik model tersebut digeneralisasi ke contoh yang belum terlihat.
 
-### Standarisasi
+### Standarisasi atau normalisasi data
 Standarisasi pada datasset dilakukan untuk tujuan:
 
 - Penskalaan Fitur: Standarisasi mengubah fitur numerik agar memiliki rata-rata 0 dan standar deviasi 1. Ini membantu algoritma machine learning bekerja lebih baik, terutama algoritma yang sensitif terhadap skala fitur, seperti KNN.
@@ -334,8 +334,109 @@ Dari hasil tersebut, maka dapat diketahui bahwa tahun memiliki pengaruh terhadap
 
 Untuk memastikan nilai tersebut maka dilakukan uji model.
 
+Model yang duginakan untuk dievaluasi adalah 
+**1. KNN**
+code
+
+ from sklearn.neighbors import KNeighborsRegressor
+    from sklearn.metrics import mean_squared_error
+
+    knn = KNeighborsRegressor(n_neighbors=10)
+    knn.fit(X_train, y_train)
+
+    models.loc['train_mse','knn'] = mean_squared_error(y_pred = knn.predict(X_train), y_true=y_train)
+
+Penjelasan:
+from sklearn.neighbors import KNeighborsRegressor: Baris ini mengimpor kelas KNeighborsRegressor dari modul sklearn.neighbors. Kelas ini digunakan untuk membuat model Regresi K-Nearest Neighbors, yang merupakan algoritma pembelajaran mesin yang digunakan untuk memprediksi nilai numerik (dalam kasus ini, harga mobil).
+from sklearn.metrics import mean_squared_error: Baris ini mengimpor fungsi mean_squared_error dari modul sklearn.metrics. Fungsi ini akan digunakan untuk mengevaluasi kinerja model KNN dengan menghitung Mean Squared Error antara harga mobil yang diprediksi dan harga mobil yang sebenarnya. Membuat dan Melatih Model KNN
+
+   knn = KNeighborsRegressor(n_neighbors=10)
+   knn.fit(X_train, y_train)
+
+knn = KNeighborsRegressor(n_neighbors=10): Di sini, kita membuat contoh kelas KNeighborsRegressor dan menetapkannya ke variabel knn. Argumen n_neighbors=10 menetapkan bahwa model harus mempertimbangkan 10 tetangga terdekat saat membuat prediksi. Ini adalah hiperparameter yang dapat disetel untuk meningkatkan kinerja model.
+
+knn.fit(X_train, y_train): Baris ini melatih model KNN menggunakan data pelatihan. X_train mewakili fitur (variabel independen) yang digunakan untuk memprediksi harga mobil, dan y_train mewakili variabel target (harga mobil sebenarnya). Metode fit mempelajari hubungan antara fitur dan variabel target dari data pelatihan.
+
+**2. Random Forest**
+Code yang digunakan:
+ 
+    from sklearn.ensemble import RandomForestRegressor
+
+    # buat model prediksi
+    RF = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)
+    RF.fit(X_train, y_train)
+
+    models.loc['train_mse','RandomForest'] = mean_squared_error(y_pred=RF.predict(X_train), y_true=y_train)
+
+Penjelasan:
+from sklearn.ensemble import RandomForestRegressor
+Baris ini mengimpor kelas RandomForestRegressor dari modul sklearn.ensemble.
+RandomForestRegressor adalah model pembelajaran mesin yang digunakan untuk tugas regresi (memprediksi nilai kontinu, seperti harga mobil dalam kasus ini).
+sklearn (scikit-learn) adalah pustaka Python populer untuk pembelajaran mesin.
+
+RF = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1): Baris ini membuat contoh model RandomForestRegressor dan menetapkannya ke variabel RF.
+n_estimators=50: Parameter ini menentukan jumlah pohon keputusan (50 dalam kasus ini) yang akan digunakan di hutan acak. Lebih banyak pohon umumnya menghasilkan kinerja yang lebih baik tetapi meningkatkan biaya komputasi.
+
+max_depth=16: Ini membatasi kedalaman maksimum setiap pohon keputusan hingga 16 level. Ini membantu mencegah overfitting, di mana model menjadi terlalu rumit dan berkinerja buruk pada data yang tidak terlihat. random_state=55: Ini menetapkan benih untuk generator angka acak, memastikan bahwa hasilnya dapat direproduksi. Jika Anda menjalankan kode lagi dengan status acak yang sama, Anda akan mendapatkan model yang sama.
+n_jobs=-1: Ini memberi tahu model untuk menggunakan semua inti prosesor yang tersedia untuk pelatihan, yang berpotensi mempercepat proses.
+RF.fit(X_train, y_train): Baris ini melatih model hutan acak (RF) menggunakan data pelatihan:
+X_train: Berisi fitur (variabel input) yang digunakan untuk memprediksi variabel target.
+y_train: Berisi variabel target (harga mobil) yang coba diprediksi oleh model.
+
+**3. Boosting Algorithm
+Code yang digunakan:
+
+from sklearn.ensemble import AdaBoostRegressor
+
+    boosting = AdaBoostRegressor(learning_rate=0.05, random_state=55)
+    boosting.fit(X_train, y_train)
+    models.loc['train_mse','Boosting'] = mean_squared_error(y_pred=boosting.predict(X_train), y_true=y_train)
+
+Penjelasan:
+Cuplikan kode ini menggunakan teknik pembelajaran mesin yang disebut Boosting untuk memprediksi harga mobil. Secara khusus, ia menggunakan algoritma AdaBoostRegressor dari modul sklearn.ensemble.
+
+Mengimpor AdaBoostRegressor:
+
+from sklearn.ensemble import AdaBoostRegressor
+
+from sklearn.ensemble import AdaBoostRegressor: Baris ini mengimpor kelas AdaBoostRegressor, yang merupakan algoritma boosting khusus yang akan kita gunakan. Membuat dan Melatih Model:
+
+   boosting = AdaBoostRegressor(learning_rate=0.05, random_state=55)
+   boosting.fit(X_train, y_train)
+   boosting = AdaBoostRegressor(learning_rate=0.05, random_state=55): 
+   
+Baris ini membuat contoh model AdaBoostRegressor.
+
+learning_rate=0.05: Mengontrol seberapa banyak masing-masing model (pelajar lemah) berkontribusi pada prediksi keseluruhan. Laju pembelajaran yang lebih rendah membuat model belajar lebih lambat tetapi dapat meningkatkan akurasi.
+
+random_state=55: Memastikan bahwa hasilnya dapat direproduksi. Menetapkan status acak memastikan bahwa algoritme akan menghasilkan hasil yang sama setiap kali dijalankan dengan data yang sama.
+
+boosting.fit(X_train, y_train): Baris ini melatih model boosting.
+
+X_train: Berisi fitur (seperti tahun, jarak tempuh, dll.) yang digunakan untuk memprediksi harga mobil. y_train: Berisi harga mobil aktual yang akan dipelajari model.
+
 ## Evaluasi model dan evaluasi model
-Pembuatan model dilakukan dengan melakukan standarisasi supaya nilai lebih normal. Kemudian Model yang dibuat adalah dengan Random Forest, KNN danBoosting Algorithm
+Pembuatan model dilakukan dengan melakukan standarisasi supaya nilai lebih normal. Kemudian Model yang dibuat adalah dengan Random Forest, KNN danBoosting Algorithm. BErikut adalah evaluasinya.
+
+**1. Evaluasi model KNN
+models.loc['train_mse','knn'] = ...: Baris ini menyimpan Mean Squared Error (MSE) pelatihan model KNN dalam Pandas DataFrame yang disebut models.
+mean_squared_error(y_pred = knn.predict(X_train), y_true=y_train): Bagian ini menghitung MSE.
+knn.predict(X_train): Menggunakan model KNN yang telah dilatih (knn) untuk memprediksi harga mobil untuk data pelatihan (X_train). Prediksi ini ditetapkan ke y_pred.
+mean_squared_error(y_pred, y_true=y_train): Membandingkan harga yang diprediksi (y_pred) dengan harga aktual (y_train) dan menghitung MSE, ukuran kesalahan prediksi model.
+
+**2. Evaluasi model Random Forest**
+models.loc['train_mse','RandomForest'] = ...: Baris ini menyimpan metrik performa model (Mean Squared Error - MSE) dalam Pandas DataFrame yang disebut models.
+mean_squared_error(y_pred=RF.predict(X_train), y_true=y_train): Ini menghitung MSE prediksi model pada data pelatihan:
+RF.predict(X_train): Ini menggunakan model yang dilatih (RF) untuk membuat prediksi pada data pelatihan (X_train).
+y_true=y_train: Ini menyediakan nilai aktual dari variabel target (y_train) untuk dibandingkan dengan prediksi.
+mean_squared_error(...): Fungsi ini menghitung MSE, metrik umum untuk mengevaluasi model regresi. Nilai MSE yang lebih rendah menunjukkan performa yang lebih baik.
+
+**3. Evaluasi model Boost algorithm**
+models.loc['train_mse','Boosting'] = ...: Baris ini menyimpan kinerja model pada data pelatihan.
+mean_squared_error(...): Fungsi ini menghitung Mean Squared Error (MSE), metrik umum untuk mengevaluasi model regresi. MSE yang lebih rendah menunjukkan akurasi yang lebih baik.
+boosting.predict(X_train): Bagian ini menggunakan model yang dilatih (boosting) untuk memprediksi harga mobil berdasarkan data pelatihan (X_train).
+y_true=y_train: Ini adalah harga mobil aktual dari data pelatihan (y_train) yang dibandingkan dengan prediksi.
+
 
 Hasil uji model adalah tersebagai berikut:
 
@@ -352,6 +453,7 @@ Dari visualisasi tersebut dapat diperoleh pemahaman bahwa model dengan menggunak
 2. prediksi_KNN =	      27158.4 (66%)
 3. prediksi_RF =	       32381.8 (79%)
 4. prediksi_Boosting =  17779.6 (43%)
+
 
 ## Kesimpulan
 Analisa ini dilakukan untuk mengetahui faktor atau variabel yang dapat memperngaruhi harga mobil. Oleh karena itu, hasil penelitian ini menjawab tertanyaan bisnis:
