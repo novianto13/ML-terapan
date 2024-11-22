@@ -131,13 +131,13 @@ Dari info data menunjukkan adanya tipe data yang tidak sesuai yaitu: Mileage, Do
 1. Kolom Mileage: tipe data object, yang menunjukkan adanya karakter non-numerik (seperti "km"). Data ini dapat diubah menjadi int64 Ini adalah langkah yang tepat.
 2. Kolom Doors: tipe data object, padahal seharusnya berupa angka yang mewakili jumlah pintu. Data ini dapat diubah menjadi int64 Ini adalah langkah yang tepat, dengan mengekstrak angka menggunakan str.extract dan mengubahnya menjadi int64. Ini juga langkah yang tepat.
 3. Kolom Levy: Awalnya bertipe data object, yang menunjukkan adanya karakter non-numerik (seperti "-").
-4. Kolom Cylinders: tipe data float64, yang mungkin kurang sesuai karena jumlah silinder biasanya berupa bilangan bulat. 
-
-Kolom Engine volume: Bertipe data float64, yang mungkin perlu dikaji lebih lanjut. Jika volume mesin selalu dinyatakan dalam bilangan bulat, Anda dapat mempertimbangkan untuk mengubahnya menjadi int64. Namun, jika ada nilai desimal yang valid, maka tipe data float64 sudah tepat.
+4. Kolom Cylinders: tipe data float64, yang mungkin kurang sesuai karena jumlah silinder biasanya berupa bilangan bulat.
+5. Kolom Engine volume: Bertipe data float64, yang mungkin perlu dikaji lebih lanjut. Jika volume mesin selalu dinyatakan dalam bilangan bulat, Anda dapat mempertimbangkan untuk mengubahnya menjadi int64. Namun, jika ada nilai desimal yang valid, maka tipe data float64 sudah tepat.
 
 car.info()
 
-![image](https://github.com/user-attachments/assets/cf18baa4-4a67-4bc3-a2f7-77d1b3aefba9)
+![image](https://github.com/user-attachments/assets/a7b6fe64-175c-4444-aa61-8e9cfc4c8e12)
+
 
 
 **C. Cek normalisasi data**
@@ -248,13 +248,72 @@ Setelah dilakukan normalisasi data, maka dataset menjadi 10515 data
 
 ![image](https://github.com/user-attachments/assets/34549d87-a080-4a3c-b858-c2e318f778d9)
 
+### Split Data
+
+from sklearn.model_selection import train_test_split
+
+    X = car.drop(["Price"],axis =1)
+    y = car["Price"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1, random_state = 123)
+
+X = car.drop(["Harga"],axis =1): 
+Baris ini membuat DataFrame baru yang disebut X dengan mengambil DataFrame mobil dan menghapus kolom "Harga". Ini berarti X akan berisi semua fitur (misalnya, tahun, jarak tempuh, pabrikan) kecuali harga itu sendiri. Fitur-fitur ini akan digunakan untuk memprediksi harga.
+
+y = car["Harga"]: 
+Baris ini membuat Seri yang disebut y yang hanya berisi kolom "Harga" dari DataFrame mobil. Ini adalah variabel target – apa yang coba diprediksi oleh model.
+
+Baris ini adalah tempat pemisahan sebenarnya terjadi menggunakan fungsi train_test_split.
+
+X, y: Fitur dan variabel target yang ditetapkan sebelumnya dilewatkan sebagai input.
+
+test_size = 0.1: Argumen ini menetapkan bahwa 10% data akan dialokasikan ke set pengujian, dan 90% sisanya akan digunakan untuk pelatihan.
+
+random_state = 123: Ini memastikan bahwa pemisahan dapat direproduksi. Jika Anda menjalankan kode lagi dengan random_state yang sama, Anda akan mendapatkan pemisahan yang sama, yang berguna untuk membandingkan hasil di berbagai proses.
+
+Output: Fungsi mengembalikan empat objek:
+
+X_train: Fitur untuk set pelatihan.
+
+X_test: Fitur untuk set pengujian.
+
+y_train: Variabel target (harga) untuk set pelatihan.
+
+y_test: Variabel target (harga) untuk set pengujian.
+
+Singkatnya: Cuplikan kode ini menyiapkan data untuk pembelajaran mesin dengan memisahkannya menjadi set pelatihan dan pengujian. Model akan dilatih pada data pelatihan dan kemudian dievaluasi menggunakan data uji untuk menilai seberapa baik model tersebut digeneralisasi ke contoh yang belum terlihat.
 
 ### Standarisasi
+Standarisasi pada datasset dilakukan untuk tujuan:
+
+- Penskalaan Fitur: Standarisasi mengubah fitur numerik agar memiliki rata-rata 0 dan standar deviasi 1. Ini membantu algoritma machine learning bekerja lebih baik, terutama algoritma yang sensitif terhadap skala fitur, seperti KNN.
+- Konsistensi: Standarisasi memastikan bahwa semua fitur memiliki skala yang sama, sehingga memudahkan perbandingan dan interpretasi.
+- Mencegah Kebocoran Informasi: Standarisasi data uji menggunakan parameter dari data latih membantu mencegah kebocoran informasi dari data uji ke data latih, yang dapat menyebabkan model overfitting.
+
+Standari sasi dilakukan dengan code:
+
+
+    from sklearn.preprocessing import StandardScaler
+
+    numerical_features = ['year']
+    scaler = StandardScaler()
+    scaler.fit(X_train[numerical_features])
+    X_train[numerical_features] = scaler.transform(X_train.loc[:, numerical_features])
+    X_train[numerical_features].head()
+  
+Standarisasi Fitur 'tahun'
+Cuplikan kode ini berfokus pada standarisasi fitur tahun dalam kumpulan data menggunakan teknik yang disebut penskalaan fitur. Penskalaan fitur penting dalam pembelajaran mesin untuk memastikan bahwa fitur dengan rentang yang berbeda tidak memengaruhi model secara tidak proporsional.
 
 
 
 ## Modeling: Korelasi dan regresi
 Hasil matrik heatmap menunjukkan nilai korelasi harga dengan tahun yang lebih baik dari pada variabel lainnya. Namun demikian kita perlu mengevaluasi dengan labih baik dengan melakukan uji regresi. Uji regresi dilakukan dengan dengan kriteria nilai P lebih rendah dari 0.05 (5%)
+
+Model Regresi Linear: Model regresi linear akan mempelajari hubungan antara 'tahun' dan 'harga' dari data pelatihan. Ini akan menemukan persamaan garis yang paling sesuai dengan data, yang dapat digunakan untuk memprediksi 'harga' berdasarkan 'tahun'.
+Prediksi: Setelah model dilatih, ia dapat digunakan untuk memprediksi harga mobil dengan memasukkan nilai 'tahun' ke dalam persamaan regresi.
+Evaluasi: Kinerja model akan dievaluasi menggunakan data pengujian dengan membandingkan prediksi model dengan harga aktual. Metrik seperti R-squared dan Mean Squared Error (MSE) dapat digunakan untuk mengukur seberapa baik model memprediksi harga.
+Kesimpulan:
+
+Meskipun kode tersebut tidak menyertakan langkah pelatihan dan evaluasi model secara eksplisit, ia menyiapkan data dan mengisyaratkan penggunaan model regresi linear. Model akan bekerja dengan mempelajari hubungan antara 'tahun' dan 'harga' dari data pelatihan dan kemudian menggunakan hubungan ini untuk memprediksi harga mobil berdasarkan tahun pembuatannya.
 
 Uji regresi dilakukan dengan pendekatan linear regression OLS dari library statmodel. Hasilnya adalah sebagai berikut:
                           
