@@ -46,7 +46,7 @@ Untuk mencapai tujuan analisa ini, berikut adalah langkah yang akan dilakukan:
 ## Data Understanding
 Dataset Ccar_prediction diambil dari kaggle: https://www.kaggle.com/datasets/deepcontractor/car-price-prediction-challenge
 
-Dataset yang digunakan menunjukkan terdapat 17 kolom atau faktor dalam data set dan terdapat 19.237 baris atau data dalam dataset, yaitu :
+Dataset dirubah dengan nama car untuk mempermudah analisa. Dataset car yang digunakan menunjukkan terdapat 17 kolom atau faktor dalam data set dan terdapat 19.237 baris atau data dalam dataset, yaitu :
 
 1. ID menunjukkan kode mobil
 2. Price menunjukkan harga mobil
@@ -65,6 +65,29 @@ Dataset yang digunakan menunjukkan terdapat 17 kolom atau faktor dalam data set 
 15. Wheel menunjukkan jumlah roda
 16. Color menunjukkan warna kendaraan
 17. Airbags menunjukkan jumlah airbag dalam kendaraan
+
+**Info data pada dataset adalah sebagai berikut:**
+
+Dataset 'car' memiliki 19237 baris dan 17 kolom. Ini berarti ada 19237 observasi (mobil) dan 17 atribut atau fitur yang mendeskripsikan setiap mobil.
+
+Terdapat beberapa tipe data dalam dataset:
+
+int64: 'ID', 'year', 'Cylinders', 'Doors', 'Airbags'
+float64: 'Price', 'Levy', 'Engine volume'
+object: 'Manufacturer', 'Model', 'Category', 'Leather interior', 'Fuel type', 'Gear box type', 'Drive wheels', 'Color', 'Wheel', 'Mileage' Tipe data object biasanya menunjukkan data tekstual atau kategorikal.
+
+Kolom 'Mileage' awalnya memiliki tipe data 'object' tetapi kemudian diubah menjadi 'int64' dalam kode Anda. Hal ini menunjukkan bahwa kolom tersebut awalnya berisi data non-numerik (kemungkinan termasuk satuan "km") yang kemudian dibersihkan dan dikonversi menjadi angka yang mewakili jarak tempuh dalam kilometer.
+
+Kolom 'Levy' awalnya memiliki tipe data 'object' tetapi kemudian diubah menjadi 'int64' dalam kode Anda. Hal ini menunjukkan bahwa kolom tersebut awalnya berisi data non-numerik (kemungkinan termasuk simbol '-') yang kemudian dibersihkan dan dikonversi menjadi angka yang mewakili pajak kendaraan.
+
+Kolom 'Doors' awalnya memiliki tipe data 'object' tetapi kemudian diubah menjadi 'int64' dalam kode Anda. Hal ini menunjukkan bahwa kolom tersebut awalnya berisi data non-numerik (kemungkinan termasuk teks "doors") yang kemudian dibersihkan dan dikonversi menjadi angka yang mewakili jumlah pintu.
+
+Kolom 'Cylinders' awalnya memiliki tipe data 'float64' tetapi kemudian diubah menjadi 'int64' dalam kode Anda. Hal ini menunjukkan bahwa kolom tersebut awalnya berisi data angka desimal yang kemudian dikonversi menjadi angka bulat yang mewakili jumlah silinder mesin.
+
+Semua kolom memiliki 19237 nilai non-null. Ini menunjukkan bahwa tidak ada nilai yang hilang (missing values) dalam dataset. Namun, perlu diingat bahwa beberapa nilai mungkin awalnya kosong atau tidak valid dan telah diubah atau diisi selama proses pembersihan data (misalnya, nilai '-' pada kolom 'Levy').
+
+Dataset menggunakan memori sebesar 3.5+ MB. Ini merupakan indikasi ukuran dataset dan kompleksitasnya.
+
 
 ### 1. Cek nilai data:
 Tahapan evaluasi nilai data dilakukan dengan tahapan sebagai berikut:
@@ -103,7 +126,14 @@ memory usage: 2.6+ MB
 Namun demikian ada data - untuk Levya yang menunjukkan bahwa nilai tidak ada. maka pada bagian ini nilai tersebut akan dirubah menjadi nilai 0.
 
 **B. Cek tipe data yang salah**
-Dari info data menunjukkan adanya tipe data yang tidak sesuai. oleh akrena itu dilakukan penyesuaina data pada faktor: Mileage, Doors, Levy, Cylinders yang semua adalah data object kemudian menjadi data int atau number. Hasilnya adalah sebagai berikut:
+Dari info data menunjukkan adanya tipe data yang tidak sesuai yaitu: Mileage, Doors, Levy, Cylinders yang semua adalah data object kemudian menjadi data int atau number. Hasilnya adalah sebagai berikut:
+
+1. Kolom Mileage: tipe data object, yang menunjukkan adanya karakter non-numerik (seperti "km"). Data ini dapat diubah menjadi int64 Ini adalah langkah yang tepat.
+2. Kolom Doors: tipe data object, padahal seharusnya berupa angka yang mewakili jumlah pintu. Data ini dapat diubah menjadi int64 Ini adalah langkah yang tepat, dengan mengekstrak angka menggunakan str.extract dan mengubahnya menjadi int64. Ini juga langkah yang tepat.
+3. Kolom Levy: Awalnya bertipe data object, yang menunjukkan adanya karakter non-numerik (seperti "-").
+4. Kolom Cylinders: tipe data float64, yang mungkin kurang sesuai karena jumlah silinder biasanya berupa bilangan bulat. 
+
+Kolom Engine volume: Bertipe data float64, yang mungkin perlu dikaji lebih lanjut. Jika volume mesin selalu dinyatakan dalam bilangan bulat, Anda dapat mempertimbangkan untuk mengubahnya menjadi int64. Namun, jika ada nilai desimal yang valid, maka tipe data float64 sudah tepat.
 
 car.info()
 
@@ -130,7 +160,7 @@ Setelah dilakukan normalisasi maka data turun menjadi 10.515 data. dengan contoh
 ### 2. Melakukan analisa EDA
 Tahap ini dilakukan dengan pendekatan Univariat dan Multivariat
 
-**2.1. Univariat**
+** Analisa Univariat**
 Pada analisa ini, data akan dilihat berdasarkan jumlah penjualannya berdasar variabel yang bersifat kategori, sebagai berikut
 
 Jumlah penjualan berdasarkan merk pembuatan
@@ -156,7 +186,7 @@ Cek data untuk variabel numerik
 ![image](https://github.com/user-attachments/assets/b9903431-38c4-49bc-a3bb-7e455f318d2e)
 Dari cek data numerik tersebut dapat diketahui bahwa data untuk harga, mileage, year cenderung normal. Data ini akan diuji lagi nanti.
 
-**2.2. Multivariat**
+** Analisa Multivariat**
 PAda analisa mulivariat, kita akan menggambungkan dua variabel atau faktor untuk mendapatkan informasi yang lebih luas. Sesuai dengan tujuan dari analisa ini, maka variabel atau faktor harga akan dikaitkan dengan variabel kategori, antara lain: category,interrior, fuel type, gear box, drive wheel.
 
 ![image](https://github.com/user-attachments/assets/ee61856b-601b-402f-a1c2-58dccbe3a5b4)
@@ -193,9 +223,33 @@ Dari matrik heatmap tersebut, tampak hanya variabel tahun yang memiliki nilai hu
 
 ## Data Preparation
 Teknik data preparation akan dilakukan dengan tahapan sebagai berikut:
-1. perbaikan tipe data
-2. normalisasi data
 
+### Feature Engineering
+Tahap ini dilakukan untuk mempersiapkan data dapat diolah lebih lanjut
+
+**1. Perbaikan tipe data**
+Hasil dari data understandeing menunjukkna bahwa tidak ada yang hilang pada dataset ini. Sehingga perbaikan dilakukan untuk memperbaiki data.
+
+1. Kolom Mileage: tipe data object, yang menunjukkan adanya karakter non-numerik (seperti "km"). Data ini dapat diubah menjadi int64 Ini adalah langkah yang tepat.
+2. Kolom Doors: tipe data object, padahal seharusnya berupa angka yang mewakili jumlah pintu. Data ini dapat diubah menjadi int64 Ini adalah langkah yang tepat, dengan mengekstrak angka menggunakan str.extract dan mengubahnya menjadi int64. Ini juga langkah yang tepat.
+3. Kolom Levy: Awalnya bertipe data object, yang menunjukkan adanya karakter non-numerik (seperti "-").
+4. Kolom Cylinders: tipe data float64, yang mungkin kurang sesuai karena jumlah silinder biasanya berupa bilangan bulat.
+
+Hasilnya adalah sebagai berikut:
+
+![image](https://github.com/user-attachments/assets/c754c557-61b6-497d-b50b-029f0e8667d2)
+
+**2. Normalisasi data**
+Hasil data understantding menunjukkan adanya data ekstreme. oleh karena itu normalisasi dilakukan, khususnya pada variabel harga. Hasilnya adalah sebagai berikut:
+
+![image](https://github.com/user-attachments/assets/2573a27b-80f7-4965-843b-397c467f2b74)
+
+Setelah dilakukan normalisasi data, maka dataset menjadi 10515 data
+
+![image](https://github.com/user-attachments/assets/34549d87-a080-4a3c-b858-c2e318f778d9)
+
+
+### Standarisasi
 
 
 
